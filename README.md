@@ -17,7 +17,7 @@ from versatile_context_decorator import ContextDecorator
 
 
 class timer_log(ContextDecorator):
-    def __init__(self, log, label: str = "code block", is_async: bool | None = None):
+    def __init__(self, log, label: str | None = None, is_async: bool | None = None):
         self.log = log
         self.label = label
         

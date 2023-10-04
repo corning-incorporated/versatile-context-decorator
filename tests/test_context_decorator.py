@@ -11,12 +11,7 @@ log = getLogger(__name__)
 class timer_log(ContextDecorator):
     """A useful example defined based on the versatile ContextDecorator"""
 
-    def __init__(
-        self,
-        logger: Logger,
-        is_async: bool | None = None,
-        label: str | None = None,
-    ):
+    def __init__(self, logger: Logger, is_async: bool | None = None, label: str | None = None):
         self.logger = logger
         self.label = label
         super().__init__(is_async)
@@ -31,8 +26,7 @@ class timer_log(ContextDecorator):
         self.start_time = perf_counter()
 
     def __exit__(self, *exc):
-        total_seconds = round(perf_counter() - self.start_time, 2)
-        self.logger.info(f"Timed operation '{self.label}' took {total_seconds} seconds")
+        self.logger.info(f"Timed '{self.label}': {round(perf_counter() - self.start_time, 2)}s")
         return False
 
 
@@ -46,7 +40,7 @@ def test_decorator(caplog, freezer):
     some_function()
 
     assert len(caplog.records) == 1
-    assert caplog.records[0].msg == "Timed operation 'some_function' took 10.0 seconds"
+    assert caplog.records[0].msg == "Timed 'some_function': 10.0s"
 
 
 @pytest.mark.asyncio
@@ -66,7 +60,7 @@ async def test_decorator_edgecase(caplog, freezer, mocker):
     some_function()
 
     assert len(caplog.records) == 1
-    assert caplog.records[0].msg == "Timed operation 'some_function' took 10.0 seconds"
+    assert caplog.records[0].msg == "Timed 'some_function': 10.0s"
 
 
 @pytest.mark.asyncio
@@ -80,7 +74,7 @@ async def test_async_decorator(caplog, freezer):
     await some_function()
 
     assert len(caplog.records) == 1
-    assert caplog.records[0].msg == "Timed operation 'some_function' took 10.0 seconds"
+    assert caplog.records[0].msg == "Timed 'some_function': 10.0s"
 
 
 def test_context_manager(caplog, freezer):
@@ -90,7 +84,7 @@ def test_context_manager(caplog, freezer):
         freezer.tick(delta=10)
 
     assert len(caplog.records) == 1
-    assert caplog.records[0].msg == "Timed operation 'my codeblock' took 10.0 seconds"
+    assert caplog.records[0].msg == "Timed 'my codeblock': 10.0s"
 
 
 @pytest.mark.asyncio
@@ -101,4 +95,4 @@ async def test_async_context_manager(caplog, freezer):
         freezer.tick(delta=10)
 
     assert len(caplog.records) == 1
-    assert caplog.records[0].msg == "Timed operation 'my codeblock' took 10.0 seconds"
+    assert caplog.records[0].msg == "Timed 'my codeblock': 10.0s"
