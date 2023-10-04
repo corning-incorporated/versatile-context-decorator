@@ -1,3 +1,4 @@
+from abc import ABC, abstractmethod
 from contextlib import AsyncContextDecorator
 from contextlib import ContextDecorator as SyncContextDecorator
 from inspect import iscoroutinefunction
@@ -5,7 +6,7 @@ from inspect import iscoroutinefunction
 __all__ = ("ContextDecorator",)
 
 
-class ContextDecorator(AsyncContextDecorator, SyncContextDecorator):
+class ContextDecorator(AsyncContextDecorator, SyncContextDecorator, ABC):
     """A base class or mixin that enables context managers to work as decorators in both async and
     non-async scenarios.
 
@@ -18,18 +19,21 @@ class ContextDecorator(AsyncContextDecorator, SyncContextDecorator):
         self.is_async = is_async
 
     def __call__(self, func):
-        if iscoroutinefunction(func) if self.is_async is None else self.is_async:
+        _is_async = iscoroutinefunction(func) if self.is_async is None else self.is_async
+        if _is_async:
             return AsyncContextDecorator.__call__(self, func)
         else:
             return SyncContextDecorator.__call__(self, func)
 
+    @abstractmethod
     def __enter__(self):
-        pass
+        pass  # pragma: no cover
 
+    @abstractmethod
     def __exit__(self, *exc):
-        return False
+        return False  # pragma: no cover
 
-    # Async context manager support to use in an existing 'async with' if needed
+    # Async context manager support to allow this in an existing 'async with' for brevity
     async def __aenter__(self):
         return self.__enter__()
 
