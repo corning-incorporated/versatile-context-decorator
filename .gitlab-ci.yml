@@ -1,0 +1,17 @@
+stages:
+  - test
+
+test:
+  stage: test
+  image: python:3.10
+  script:
+    - pip install poetry
+    - poetry install
+    - poetry run pytest
+
+lint:
+  stage: test
+  image: python:3.10
+  script:
+    - pip install pre-commit
+    - pre-commit run --all-files
