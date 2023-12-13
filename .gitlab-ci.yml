@@ -1,5 +1,7 @@
+# Copyright (c) 2022-2023 Corning Incorporated. All rights reserved.
 stages:
   - test
+  - publish
 
 test:
   stage: test
@@ -15,3 +17,15 @@ lint:
   script:
     - pip install pre-commit
     - pre-commit run --all-files
+
+publish:
+  stage: publish
+  image: python:3.10
+  only: ["main"]
+  script:
+    - pip install poetry
+    - poetry install
+    - poetry build
+    - poetry config repositories.gitlab "${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/pypi"
+    - poetry config http-basic.gitlab gitlab-ci-token "$CI_JOB_TOKEN"
+    - poetry publish --repository gitlab

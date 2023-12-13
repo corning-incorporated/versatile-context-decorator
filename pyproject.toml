@@ -1,3 +1,4 @@
+# Copyright (c) 2022-2023 Corning Incorporated. All rights reserved.
 [tool.poetry]
 name = "versatile_context_decorator"
 version = "0.0.1"

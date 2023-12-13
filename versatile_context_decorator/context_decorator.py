@@ -1,3 +1,4 @@
+# Copyright (c) 2022-2023 Corning Incorporated. All rights reserved.
 from abc import ABC, abstractmethod
 from contextlib import AsyncContextDecorator
 from contextlib import ContextDecorator as SyncContextDecorator
