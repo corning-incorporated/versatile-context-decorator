@@ -2,7 +2,7 @@
 # Public - Corning
 [tool.poetry]
 name = "versatile-context-decorator"
-version = "0.1.0"
+version = "0.1.1"
 description = "Versatile ContextDecorator"
 authors = ["Elizaveta Kishchukova <kishchuked@corning.com>"]
 
