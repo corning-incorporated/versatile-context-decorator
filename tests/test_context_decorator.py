@@ -1,4 +1,5 @@
 # Copyright (c) 2022-2023 Corning Incorporated. All rights reserved.
+# Public - Corning
 from logging import INFO, Logger, getLogger
 from time import perf_counter
 
